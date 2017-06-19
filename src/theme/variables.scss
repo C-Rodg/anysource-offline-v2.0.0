@@ -38,30 +38,57 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  p-primary-dark : #00796b,
+  p-primary : #009688,
+  p-primary-light : #B2DFDB,
+  p-text : #FFFFFF,
+  p-text-tabs: #c1c1c1,
+  p-accent : #607d8b,
+  p-text-dark : #212121,
+  p-text-secondary : #757575,
+  p-divider : #BDBDBD,
+  white-divider : #E5E5E5,
+  p-danger : #e74c3c,
+  p-success: #2ecc71
 );
 
 
-// App iOS Variables
-// --------------------------------------------------
-// iOS only Sass variables can go here
+// Toast Overrides
+$toast-md-title-padding-top: 28px;
 
+// Changing Select Radio Button color
+$alert-md-button-text-color: color($colors, p-primary-dark);
 
+// Hide bottom box shadow on text inputs
+$text-input-md-show-focus-highlight: false;
 
+// Change DateTime picker color
+.picker-md .picker-opt.picker-opt-selected {
+  color: color($colors, p-primary-dark) !important;
+}
 
-// App Material Design Variables
-// --------------------------------------------------
-// Material Design only Sass variables can go here
+.picker-md .picker-button {
+  color: color($colors, p-primary-dark) !important;
+}
 
+$loading-md-spinner-color: color($colors, p-primary-dark);
 
+.alert-md .alert-input {
+  border-radius: 0 !important;
+}
 
+$alert-md-input-border-color-focused: color($colors, p-primary);
 
-// App Windows Variables
-// --------------------------------------------------
-// Windows only Sass variables can go here
+// Tabs overwrites
+.tabs-md .tabbar {
+  background: color($colors, p-primary-dark) !important;
+}
 
-
-
+$tabs-md-tab-text-color-active: color($colors, p-text);
+$tabs-md-tab-icon-color-active: color($colors, p-text);
+$tabs-md-tab-text-color: color($colors, p-text-tabs);
+$tabs-md-tab-icon-color: color($colors, p-text-tabs);
 
 // App Theme
 // --------------------------------------------------
