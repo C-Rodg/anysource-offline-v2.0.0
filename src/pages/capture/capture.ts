@@ -6,9 +6,20 @@ import { NavController } from 'ionic-angular';
   templateUrl: 'capture.html'
 })
 export class CapturePage {
+  
+  editFlag: boolean = false;
+  saveText: string = "Save Record";
 
   constructor(public navCtrl: NavController) {
 
   }
 
+  ionViewWillEnter() {
+
+  }
+
+  // Save new lead or edited lead
+  saveRecord() {
+
+  }
 }

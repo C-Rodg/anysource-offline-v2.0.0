@@ -3,4 +3,9 @@ page-capture {
         background-color: #f4f4f4;
         background: linear-gradient(to bottom, #e1e1e1 0%, #f4f4f4 100%);
     }
+
+    ion-card img {
+        max-width: 300px;
+        margin: 10px auto;
+    }
 }
