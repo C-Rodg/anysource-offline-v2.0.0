@@ -90,6 +90,15 @@ $tabs-md-tab-icon-color-active: color($colors, p-text);
 $tabs-md-tab-text-color: color($colors, p-text-tabs);
 $tabs-md-tab-icon-color: color($colors, p-text-tabs);
 
+.tabs-md[tabsHighlight=true] .tab-highlight {
+  background: #fff !important;
+}
+
+$tabs-md-tab-padding-top: 10px;
+$tabs-md-tab-padding-bottom: 10px;
+$tabs-md-tab-padding-active-top: 10px;
+$tabs-md-tab-padding-active-bottom: 10px;
+
 // App Theme
 // --------------------------------------------------
 // Ionic apps can have different themes applied, which can
