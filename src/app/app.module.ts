@@ -11,6 +11,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { TextInput, TextArea, PickoneInput, PickmanyInput, CheckboxInput } from '../pages/form-items/';
 
 import { StorageService } from '../providers/storageService';
+import { SettingsService } from '../providers/settingsService';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { StorageService } from '../providers/storageService';
   ],
   providers: [
     StorageService,
+    SettingsService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

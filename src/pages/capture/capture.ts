@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { UUID } from 'angular2-uuid';
 
+import { SettingsService } from '../../providers/settingsService';
 import { pickManyValidator } from '../../helpers/pickManyValidator';
 import { survey } from '../../config/survey';
 
@@ -19,8 +21,8 @@ export class CapturePage {
   requiredFields: Array<string> = [];
 
   constructor(
-    //private storageService: StorageService,
     public navCtrl: NavController,
+    private settingsService: SettingsService,
     private toastCtrl: ToastController,
     private formBuilder: FormBuilder
   ) {
@@ -38,6 +40,12 @@ export class CapturePage {
     survey.forEach((question) => {
       formObj[question.tag] = this.determineValidation(question);
     });
+
+    // Generate RegID
+    formObj['qrRegId'] = UUID.UUID();
+    formObj['qrDeviceId'] = this.settingsService.getDeviceId();
+    formObj['qrBoothRep'] = this.settingsService.boothRep;
+    formObj['qrBoothStation'] = this.settingsService.boothStation;
     return formObj;
   }
 

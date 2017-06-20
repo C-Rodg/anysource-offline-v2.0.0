@@ -8,7 +8,7 @@
         <checkbox-input *ngIf="question.type === 'CHECKBOX'" prompt={{question.prompt}} required={{question.required}} formControlName={{question.tag}}></checkbox-input>
         <pickmany-input *ngIf="question.type === 'PICKMANY'" prompt={{question.prompt}} required={{question.required}} formControlName={{question.tag}} [pickOptions]="question.options"></pickmany-input>
         <pickone-input *ngIf="question.type === 'PICKONE'" prompt={{question.prompt}} required={{question.required}} formControlName={{question.tag}} [pickOptions]="question.options"></pickone-input>
-      </div>
+      </div>      
     </form>
   </ion-card>
 
