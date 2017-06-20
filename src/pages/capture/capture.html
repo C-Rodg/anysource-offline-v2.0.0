@@ -1,10 +1,18 @@
 <ion-content>
-  <ion-card>
+  <ion-card class="contact-card">
     <img src="assets/logo.png" alt="Validar, Inc." />
-    <div class="form-container">
-      
-    </div>
+    <form [formGroup]="recordForm" class="form-container">
+      <div *ngFor="let question of surveyObj">
+        <text-input *ngIf="question.type === 'TEXT'" prompt={{question.prompt}} required={{question.required}} formControlName={{question.tag}}></text-input>
+        <text-area *ngIf="question.type === 'TEXTAREA'" prompt={{question.prompt}} required={{question.required}} formControlName={{question.tag}}></text-area>
+        <checkbox-input *ngIf="question.type === 'CHECKBOX'" prompt={{question.prompt}} required={{question.required}} formControlName={{question.tag}}></checkbox-input>
+        <pickmany-input *ngIf="question.type === 'PICKMANY'" prompt={{question.prompt}} required={{question.required}} formControlName={{question.tag}} [pickOptions]="question.options"></pickmany-input>
+        <pickone-input *ngIf="question.type === 'PICKONE'" prompt={{question.prompt}} required={{question.required}} formControlName={{question.tag}} [pickOptions]="question.options"></pickone-input>
+      </div>
+    </form>
   </ion-card>
+
+  <button (click)="logForm()">Log FORM</button>
 </ion-content>
 
 <ion-footer>

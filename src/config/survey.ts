@@ -15,13 +15,19 @@ const survey = [
         type: "TEXT",
         tag: "qrCompany",
         prompt: "Company",
-        required: false
+        required: true
+    },
+    {
+        type: "TEXT",
+        tag: "qrEmail",
+        prompt: "Email",
+        required: true
     },
     {
         type: "PICKONE",
         tag: "qrFollowUp",
         prompt: "How should we follow-up?",
-        required: false,
+        required: true,
         options: [
             {
                 tag: "qrFollowUp_1",
@@ -42,7 +48,7 @@ const survey = [
         type: "CHECKBOX",
         tag: 'qrInfoRequest',
         prompt: 'Information requested?',
-        required: false,
+        required: true,
         options: [{
             tag: 'qrInfoRequest_Yes',
             prompt: ''
@@ -52,7 +58,7 @@ const survey = [
         type: 'PICKMANY',
         tag: 'qrProductInterest',
         prompt: 'Product Interest',
-        required: false,
+        required: true,
         options: [
             {
                 tag: 'qrProductInterest_1',
@@ -72,8 +78,8 @@ const survey = [
         type: 'TEXTAREA',
         tag: 'qrNotes',
         prompt: 'Notes',
-        required: false
+        required: true
     }
 ];
 
-export default { survey };
+export { survey };

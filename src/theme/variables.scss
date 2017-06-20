@@ -61,7 +61,10 @@ $toast-md-title-padding-top: 28px;
 $alert-md-button-text-color: color($colors, p-primary-dark);
 
 // Hide bottom box shadow on text inputs
-$text-input-md-show-focus-highlight: false;
+//$text-input-md-show-focus-highlight: false;
+$text-input-md-highlight-color: color($colors, p-primary);
+$text-input-md-highlight-color-valid: color($colors, p-primary-dark);
+$text-input-md-highlight-color-invalid: color($colors, p-danger);
 
 // Change DateTime picker color
 .picker-md .picker-opt.picker-opt-selected {
@@ -98,6 +101,13 @@ $tabs-md-tab-padding-top: 10px;
 $tabs-md-tab-padding-bottom: 10px;
 $tabs-md-tab-padding-active-top: 10px;
 $tabs-md-tab-padding-active-bottom: 10px;
+
+// Toast Customization
+.notify-error {
+  .toast-wrapper {
+    background-color: color($colors, p-danger) !important;
+  }
+}
 
 // App Theme
 // --------------------------------------------------

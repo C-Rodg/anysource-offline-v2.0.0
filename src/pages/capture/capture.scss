@@ -6,6 +6,80 @@ page-capture {
 
     ion-card img {
         max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .contact-card {
+        max-width: 800px;
         margin: 10px auto;
+        padding: 10px 0;
+    }
+
+    .form-container {
+        .req ion-label::after {
+            content: " *";
+            color: color($colors, danger);
+        }
+
+        .req.item-select ion-label::after {
+            position: absolute;
+            right: 8px; 
+            top: 12px;
+        }
+
+        // .item-md {
+        //     padding-right: 16px;
+        // }
+
+        // .input-wrapper .input {
+        //     border-bottom: 1px solid #dedede;            
+        // }
+
+        // .text-input.text-input-md {
+        //     margin-right: 0;
+        //     width: 100%;
+        // }
+        
+
+        // ion-item.input-has-focus .item-inner {
+        //     border-bottom-color: color($colors, p-primary) !important;
+        //     box-shadow: inset 0 -1px 0 0 color($colors, p-primary) !important;
+        // }
+
+        pickmany-input ion-item,
+        checkbox-input ion-item,
+        pickone-input ion-item {
+            min-height: 66px;
+        }
+
+        .item-md.item-block .item-inner {
+            padding-right: 0;
+            margin-right: 8px;
+        }
+
+        ion-item.input-has-focus ion-label {
+            color: color($colors, p-primary) !important;
+        }
+        
+        ion-item.ng-pristine.item-md .item-inner {
+            border-bottom: 1px solid #dedede;
+        }
+
+        pickmany-input .item-inner,
+        pickone-input .item-inner {
+            border-bottom: 1px solid #dedede !important;
+        }
+
+        ion-item:not(.item-select) ion-label {
+            white-space: normal;
+        }
+
+        ion-checkbox.checkbox {
+            margin-right: 18px !important;
+        }
+
+        ion-item.item-checkbox:not(.item-checkbox-checked) .item-inner {
+            color: #999;
+        }
     }
 }
