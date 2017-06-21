@@ -41,7 +41,7 @@ export class SettingsPage {
 
   // Attempt to upload scans
   forceUpload() {
-
+    
   }
 
 }

@@ -12,6 +12,7 @@ import { TextInput, TextArea, PickoneInput, PickmanyInput, CheckboxInput } from 
 
 import { StorageService } from '../providers/storageService';
 import { SettingsService } from '../providers/settingsService';
+import { UploadService } from '../providers/uploadService';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { SettingsService } from '../providers/settingsService';
   providers: [
     StorageService,
     SettingsService,
+    UploadService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
