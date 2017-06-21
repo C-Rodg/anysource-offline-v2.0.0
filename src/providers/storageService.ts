@@ -33,6 +33,10 @@ export class StorageService {
         });
     }
 
+    // Delete Record
+    deleteRecord(regId: string): Promise<any> {
+        return localforage.removeItem(regId);
+    }    
 
 
     // EXAMPLE

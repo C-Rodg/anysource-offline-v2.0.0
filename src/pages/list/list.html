@@ -6,10 +6,10 @@
           <ion-item class="list__contactbox">
             <h1>{{lead.survey.qrFirstName + " " + lead.survey.qrLastName}}</h1>
             <p>{{lead.survey.qrCompany}}</p>
-            <p class="list__contactbox__date"><small>CAPTURE TIME</small></p>
+            <p class="list__contactbox__date"><small>{{lead.time}}</small></p>
           </ion-item>
           <ion-item-options side="right">
-            <button ion-button color="p-primary" (tap)="editRecord(lead.survey.qrRegId)">
+            <button ion-button color="p-primary" class="edit-btn" (tap)="editRecord(lead)">
               <ion-icon name="create"></ion-icon>
               Edit
             </button>

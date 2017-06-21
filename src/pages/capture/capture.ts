@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { Content, NavController, ToastController } from 'ionic-angular';
+import { Content, NavController, ToastController, NavParams } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
+import * as moment from 'moment';
 
 import { SettingsService } from '../../providers/settingsService';
 import { StorageService } from '../../providers/storageService';
@@ -26,14 +27,28 @@ export class CapturePage {
     private settingsService: SettingsService,
     private storageService: StorageService,
     private toastCtrl: ToastController,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private navParams: NavParams
   ) {
     this.surveyObj = survey;
-    this.recordForm = this.formBuilder.group(this.createFreshForm(this.surveyObj));
+    const params = this.navParams.data;
+    if (params && params.hasOwnProperty('survey')) {
+      this.editFlag = true;
+      this.recordForm = this.formBuilder.group(this.createFilledForm(this.surveyObj, params))
+    } else {
+      this.editFlag = false;
+      this.recordForm = this.formBuilder.group(this.createFreshForm(this.surveyObj));
+    }
   }
 
-  ionViewWillEnter() {
-    console.log('entering...');
+  // Create a form object for edits
+  createFilledForm(survey, form) {
+    let formObj = {};    
+    survey.forEach((question) => {
+      formObj[question.tag] = this.determineValidation(question, {edit: true, val: form[question.tag] });
+    })
+    formObj['qrRegId'] = form.qrRegId;
+    return formObj;
   }
 
   // Create a fresh form object to capture data
@@ -44,31 +59,47 @@ export class CapturePage {
     });
     formObj['qrRegId'] = UUID.UUID();
     return formObj;
-  }
+  }  
 
   // Create Validation / beginning value array per question
-  determineValidation(ques) {
+  determineValidation(ques, prev?) {
     let validateArr = <any>[];
     if (ques.type === 'TEXT' || ques.type === 'TEXTAREA') {
-      validateArr.push('');
+      if (prev && prev.edit) {
+        validateArr.push(prev.val);
+      } else {
+        validateArr.push('');
+      }      
       if (ques.required) {
         this.requiredFields.push(ques);
         validateArr.push(Validators.required);
       }    
     } else if (ques.type === 'PICKONE') {
-      validateArr.push('');
+      if (prev && prev.edit) {
+        validateArr.push(prev.val);
+      } else {
+        validateArr.push('');
+      }      
       if (ques.required) {
         this.requiredFields.push(ques);
         validateArr.push(Validators.required);
       }
     } else if (ques.type === 'PICKMANY') {
-      validateArr.push([]);
+      if (prev && prev.edit && prev.val && prev.val.length > 0) {
+        validateArr.push(prev.val);
+      } else {
+        validateArr.push([]);
+      }      
       if (ques.required) {
         this.requiredFields.push(ques);
         validateArr.push(Validators.compose([Validators.required, pickManyValidator]));
       }
     } else if (ques.type === 'CHECKBOX') {
-      validateArr.push(false);
+      if (prev && prev.edit) {
+        validateArr.push(prev.val)
+      } else {
+        validateArr.push(false);
+      }      
       if (ques.required) {
         this.requiredFields.push(ques);
         validateArr.push(Validators.pattern('true'));
@@ -104,6 +135,8 @@ export class CapturePage {
     thisForm['qrDeviceId'] = this.settingsService.settings.deviceId;  
     thisForm['qrBoothRep'] = this.settingsService.settings.boothRep;
     thisForm['qrBoothStation'] = this.settingsService.settings.boothStation;
+    thisForm['qrCreateDateTime'] = moment().format();
+    thisForm['qrEditDateTime'] = moment().format();
 
     console.log(thisForm);
     const person = this.createPerson(thisForm);
@@ -131,7 +164,7 @@ export class CapturePage {
   createPerson(form) {
     const person = {
       uploaded: false,
-      deleted: false,
+      time: moment(form.qrEditDateTime).format('MMM DD, hh:mm A').toUpperCase(),
       survey: form
     };
     return person;

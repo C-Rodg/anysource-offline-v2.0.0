@@ -30,7 +30,8 @@ import { SettingsService } from '../providers/settingsService';
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp, {
-      mode: 'md'
+      mode: 'md',
+      tabsHideOnSubPages: true
     })
   ],
   bootstrap: [IonicApp],

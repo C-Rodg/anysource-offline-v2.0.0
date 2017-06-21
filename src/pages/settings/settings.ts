@@ -28,9 +28,4 @@ export class SettingsPage {
 
   }
 
-  // Clear out deleted scans
-  clearDeleted() {
-    
-  }
-
 }
