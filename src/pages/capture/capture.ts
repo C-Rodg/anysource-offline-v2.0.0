@@ -4,6 +4,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
 
 import { SettingsService } from '../../providers/settingsService';
+import { StorageService } from '../../providers/storageService';
 import { pickManyValidator } from '../../helpers/pickManyValidator';
 import { survey } from '../../config/survey';
 
@@ -15,7 +16,6 @@ export class CapturePage {
   @ViewChild(Content) contentPage : Content;
 
   editFlag: boolean = false;
-  saveText: string = "Save Record";
 
   surveyObj: Array<any> = [];
   recordForm: FormGroup;
@@ -24,6 +24,7 @@ export class CapturePage {
   constructor(
     public navCtrl: NavController,
     private settingsService: SettingsService,
+    private storageService: StorageService,
     private toastCtrl: ToastController,
     private formBuilder: FormBuilder
   ) {
@@ -41,12 +42,7 @@ export class CapturePage {
     survey.forEach((question) => {
       formObj[question.tag] = this.determineValidation(question);
     });
-
-    // Generate RegID
     formObj['qrRegId'] = UUID.UUID();
-    formObj['qrDeviceId'] = this.settingsService.getDeviceId();
-    formObj['qrBoothRep'] = this.settingsService.boothRep;
-    formObj['qrBoothStation'] = this.settingsService.boothStation;
     return formObj;
   }
 
@@ -81,8 +77,15 @@ export class CapturePage {
     return validateArr;
   }
 
-  // Save new lead or edited lead
-  saveRecord() {
+  // Save Edits
+  saveEdits() {
+
+  }
+
+  // Save new lead
+  saveNewRecord() {
+
+    // Check if valid
     const invalid = this.checkValidity(this.requiredFields, this.recordForm.value);
     if (invalid) {
       let toast = this.toastCtrl.create({
@@ -95,6 +98,43 @@ export class CapturePage {
       this.scrollToTop();
       return false;
     }
+
+    // Include extra fields
+    const thisForm = this.recordForm.value;
+    thisForm['qrDeviceId'] = this.settingsService.settings.deviceId;  
+    thisForm['qrBoothRep'] = this.settingsService.settings.boothRep;
+    thisForm['qrBoothStation'] = this.settingsService.settings.boothStation;
+
+    console.log(thisForm);
+    const person = this.createPerson(thisForm);
+    this.storageService.savePerson(person).then((data) => {
+      let toast = this.toastCtrl.create({
+        message: `New record saved!`,
+        duration: 2500,
+        position: 'top'
+      });
+      this.recordForm = this.formBuilder.group(this.createFreshForm(this.surveyObj));
+      toast.present();      
+      this.scrollToTop();   
+    }).catch((err) => {
+      let toast = this.toastCtrl.create({
+        message: 'There was an issue saving this record..',
+        duration: 2500,
+        position: 'top', 
+        cssClass: 'notify-error'
+      });
+      toast.present();
+    });
+  }
+
+  // Create person to save
+  createPerson(form) {
+    const person = {
+      uploaded: false,
+      deleted: false,
+      survey: form
+    };
+    return person;
   }
 
   // Check for form validation
@@ -123,5 +163,11 @@ export class CapturePage {
   // TESTING
   logForm() {
     console.log(this.recordForm);
+  }
+
+  getPerson() {
+    this.storageService.getAllRecords().then((data) => {
+      console.log(data);
+    }).catch((err) => console.log(err));
   }
 }

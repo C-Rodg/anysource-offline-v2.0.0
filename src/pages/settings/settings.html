@@ -1,30 +1,53 @@
 <ion-content>
+  <ion-card class="inline-card-button" (tap)="forceUpload()">
+    <ion-row>
+      <ion-col class="inline-card-icon" col-4 text-center stretch>
+        <ion-icon name="ios-cloud-upload-outline"></ion-icon>
+      </ion-col>
+      <ion-col center padding-left>
+        <h1>Upload Scans</h1>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <ion-card class="inline-card-button" (tap)="clearDeleted()">
+    <ion-row>
+      <ion-col class="inline-card-icon" col-4 text-center stretch>
+        <ion-icon name="ios-trash-outline"></ion-icon>
+      </ion-col>
+      <ion-col center padding-left>
+        <h1>Clear Deleted</h1>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
   <ion-card class="settings-card form-container content-card">
     <ion-item>
       <ion-label>Overwrite Records</ion-label>
-      <ion-toggle color="p-accent"></ion-toggle>
+      <ion-toggle color="p-accent" [(ngModel)]="settingsService.settings.overwriteRecords" (ionChange)="saveSettings()"></ion-toggle>
     </ion-item>
     <ion-item>
         <ion-label stacked>Rep Name</ion-label>
-        <ion-input type="text" ></ion-input>
+        <ion-input type="text" [(ngModel)]="settingsService.settings.boothRep" (ionChange)="saveSettings()"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label stacked>Station Name</ion-label>
-        <ion-input type="text" ></ion-input>
+        <ion-input type="text" [(ngModel)]="settingsService.settings.boothStation" (ionChange)="saveSettings()"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label stacked>Lead Source Guid</ion-label>
-        <ion-input type="text" disabled></ion-input>
+        <ion-input type="text" disabled [ngModel]="settingsService.lsgGuid"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label stacked>Organization Guid</ion-label>
-        <ion-input type="text" disabled></ion-input>
+        <ion-input type="text" disabled [ngModel]="settingsService.orgGuid"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label stacked>Device ID</ion-label>
-        <ion-input type="text" disabled></ion-input>
+        <ion-input type="text" disabled [ngModel]="settingsService.settings.deviceId"></ion-input>
     </ion-item>
-  </ion-card>
+  </ion-card>  
+
 </ion-content>
 
 <ion-footer>

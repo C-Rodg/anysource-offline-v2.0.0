@@ -16,18 +16,21 @@ function getQueryStringObj() {
 @Injectable()
 export class SettingsService {
     
-    public deviceId: string = "";
-    public boothRep: string = "";
-    public boothStation: string = "";
-    public overwriteRecords: boolean = true;
     public orgGuid: string = "";
     public lsgGuid: string = "";
+
+    public settings = {
+        deviceId: "",
+        boothRep: "",
+        boothStation: "",
+        overwriteRecords: true        
+    }
 
     constructor(
         private alertCtrl: AlertController
     ) {        
-        this.setOrCreateDeviceId();
         this.checkForCreds();
+        this.loadSettings();
     }
 
     // Check for Org & Lsg
@@ -46,25 +49,28 @@ export class SettingsService {
         }
     }
 
-    // Set or Create a new device Id
-    setOrCreateDeviceId() {
-        let deviceId = window.localStorage.getItem('deviceId');
-        if (!deviceId) {
-            this.deviceId = UUID.UUID();
-            window.localStorage.setItem('deviceId', this.deviceId);
+    // Load settings object
+    loadSettings() {
+        const settings = window.localStorage.getItem('validar_settings');
+        if (settings) {
+            const settingsObj = JSON.parse(settings);
+            this.settings = settingsObj;
+            if (!this.settings.deviceId) {
+                this.settings.deviceId = UUID.UUID();
+            }
+            this.saveSettingsToLocal();
         } else {
-            this.deviceId = deviceId;
+            if (!this.settings.deviceId) {
+                this.settings.deviceId = UUID.UUID();
+            }
+            this.saveSettingsToLocal();
         }
-        return this.deviceId;
     }
 
-    // Get Device ID
-    getDeviceId() {
-        if (this.deviceId) {
-            return this.deviceId;
-        } else {
-            return this.setOrCreateDeviceId();
-        }
+    // Save settings to local storage
+    saveSettingsToLocal() {
+        const settingsStr = JSON.stringify(this.settings);
+        window.localStorage.setItem('validar_settings', settingsStr);
     }
 
 }

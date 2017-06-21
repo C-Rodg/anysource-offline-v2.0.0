@@ -1,5 +1,27 @@
 <ion-content>
-  
+  <div *ngFor="let lead of leads">
+    <ion-card>
+      <ion-list no-lines>
+        <ion-item-sliding>
+          <ion-item class="list__contactbox">
+            <h1>{{lead.survey.qrFirstName + " " + lead.survey.qrLastName}}</h1>
+            <p>{{lead.survey.qrCompany}}</p>
+            <p class="list__contactbox__date"><small>CAPTURE TIME</small></p>
+          </ion-item>
+          <ion-item-options side="right">
+            <button ion-button color="p-primary" (tap)="editRecord(lead.survey.qrRegId)">
+              <ion-icon name="create"></ion-icon>
+              Edit
+            </button>
+            <button ion-button color="danger" (tap)="deleteRecord(lead.survey.qrRegId)">
+              <ion-icon name="trash"></ion-icon>
+              Delete
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </ion-card>
+  </div>
 </ion-content>
 
 <ion-footer>

@@ -13,10 +13,13 @@
   </ion-card>
 
   <button (click)="logForm()">Log FORM</button>
+
+  <button (click)="getPerson()">Get Person</button>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <button color="p-primary" ion-button block large (tap)="saveRecord()">{{saveText}}</button>
+    <button *ngIf="!editFlag" color="p-primary" ion-button block large (tap)="saveNewRecord()">Save Record</button>
+    <button *ngIf="editFlag" color="p-primary" ion-button block large (tap)="saveEdits()">Save Edits</button>
   </ion-toolbar>
 </ion-footer>

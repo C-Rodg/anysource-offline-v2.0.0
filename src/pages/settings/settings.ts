@@ -18,4 +18,19 @@ export class SettingsPage {
 
   }
 
+  // onChange, save to local storage
+  saveSettings() {
+    this.settingsService.saveSettingsToLocal();
+  }
+
+  // Attempt to upload scans
+  forceUpload() {
+
+  }
+
+  // Clear out deleted scans
+  clearDeleted() {
+    
+  }
+
 }
