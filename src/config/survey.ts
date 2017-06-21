@@ -106,7 +106,7 @@ const survey = [
         type: 'PICKMANY',
         tag: 'qrProductInterest',
         prompt: 'Which products and services are you interested in?',
-        required: true,
+        required: false,
         options: [
             {
                 tag: 'qrProductInterest_1',

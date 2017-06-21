@@ -231,15 +231,4 @@ export class CapturePage {
   scrollToTop() {
     this.contentPage.scrollToTop();
   }
-
-  // TESTING
-  logForm() {
-    console.log(this.recordForm);
-  }
-
-  getPerson() {
-    this.storageService.getAllRecords().then((data) => {
-      console.log(data);
-    }).catch((err) => console.log(err));
-  }
 }
