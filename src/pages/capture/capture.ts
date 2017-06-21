@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Content, NavController, ToastController } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
 
@@ -12,7 +12,8 @@ import { survey } from '../../config/survey';
   templateUrl: 'capture.html'
 })
 export class CapturePage {
-  
+  @ViewChild(Content) contentPage : Content;
+
   editFlag: boolean = false;
   saveText: string = "Save Record";
 
@@ -91,6 +92,7 @@ export class CapturePage {
         cssClass: 'notify-error'
       });
       toast.present();
+      this.scrollToTop();
       return false;
     }
   }
@@ -111,6 +113,11 @@ export class CapturePage {
       }
     }
     return false;
+  }
+
+  // DOM Helper - go to top of page
+  scrollToTop() {
+    this.contentPage.scrollToTop();
   }
 
   // TESTING

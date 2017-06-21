@@ -3,4 +3,8 @@ page-settings {
         background-color: #f4f4f4;
         background: linear-gradient(to bottom, #e1e1e1 0%, #f4f4f4 100%);
     }
+
+    ion-card.settings-card.form-container.content-card ion-item.item .item-inner {
+        border-bottom: 1px solid #dedede;
+    }
 }

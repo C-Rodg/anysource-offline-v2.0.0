@@ -7,6 +7,8 @@ import { NavController } from 'ionic-angular';
 })
 export class ListPage {
 
+  totalLeads: number = 0;
+
   constructor(public navCtrl: NavController) {
 
   }

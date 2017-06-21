@@ -53,6 +53,15 @@ $colors: (
   p-success: #2ecc71
 );
 
+// Prevent Full Width cards
+page-list .content-card,
+page-settings .content-card,
+page-capture .content-card {
+    max-width: 800px;
+    margin: 10px auto;
+    padding: 10px 0;
+}
+
 
 // Toast Overrides
 $toast-md-title-padding-top: 28px;
@@ -106,6 +115,56 @@ $tabs-md-tab-padding-active-bottom: 10px;
 .notify-error {
   .toast-wrapper {
     background-color: color($colors, p-danger) !important;
+  }
+}
+
+// Forms
+.form-container {
+  .req ion-label::after {
+      content: " *";
+      color: color($colors, danger);
+  }
+
+  .req.item-select ion-label::after {
+      position: absolute;
+      right: 8px; 
+      top: 12px;
+  }
+
+  pickmany-input ion-item,
+  checkbox-input ion-item,
+  pickone-input ion-item {
+      min-height: 66px;
+  }
+
+  .item-md.item-block .item-inner {
+      padding-right: 0;
+      margin-right: 8px;
+  }
+
+  ion-item.input-has-focus ion-label {
+      color: color($colors, p-primary) !important;
+  }
+  
+  ion-item.ng-pristine.item-md .item-inner {
+      border-bottom: 1px solid #dedede;
+  }
+
+  pickmany-input .item-inner,
+  pickone-input .item-inner {
+      border-bottom: 1px solid #dedede !important;
+  }
+
+  ion-item:not(.item-select) ion-label {
+      white-space: normal;
+  }
+
+  ion-checkbox.checkbox {
+      margin-right: 18px !important;
+  }
+
+  ion-item.item-checkbox:not(.item-checkbox-checked) .item-inner {
+      color: #999;
   }
 }
 
