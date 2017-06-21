@@ -13,21 +13,69 @@ const survey = [
     },
     {
         type: "TEXT",
-        tag: "qrCompany",
-        prompt: "Company",
-        required: true
+        tag: "qrEmail",
+        prompt: "Email",
+        required: false
     },
     {
         type: "TEXT",
-        tag: "qrEmail",
-        prompt: "Email",
-        required: true
+        tag: "qrCompany",
+        prompt: "Company",
+        required: false
     },
+    {
+        type: "TEXT",
+        tag: "qrTitle",
+        prompt: "Title",
+        required: false
+    },
+    {
+        type: "TEXT",
+        tag: "qrPhone",
+        prompt: "Phone",
+        required: false
+    },
+    {
+        type: "TEXT",
+        tag: "qrAddress1",
+        prompt: "Address 1",
+        required: false
+    },
+    {
+        type: "TEXT",
+        tag: "qrAddress2",
+        prompt: "Address 2",
+        required: false
+    },
+    {
+        type: "TEXT",
+        tag: "qrCity",
+        prompt: "City",
+        required: false
+    },
+    {
+        type: "TEXT",
+        tag: "qrState",
+        prompt: "State",
+        required: false
+    },
+    {
+        type: "TEXT",
+        tag: "qrZip",
+        prompt: "Zip Code",
+        required: false
+    },
+    {
+        type: "TEXT",
+        tag: "qrCountry",
+        prompt: "Country",
+        required: false
+    }, 
     {
         type: "PICKONE",
         tag: "qrFollowUp",
-        prompt: "How should we follow-up?",
-        required: true,
+        prompt: "How should we follow-up? We have a ton of different options to meet your needs!",
+        required: false,
         options: [
             {
                 tag: "qrFollowUp_1",
@@ -48,7 +96,7 @@ const survey = [
         type: "CHECKBOX",
         tag: 'qrInfoRequest',
         prompt: 'Information requested?',
-        required: true,
+        required: false,
         options: [{
             tag: 'qrInfoRequest_Yes',
             prompt: ''
@@ -57,7 +105,7 @@ const survey = [
     {
         type: 'PICKMANY',
         tag: 'qrProductInterest',
-        prompt: 'Product Interest',
+        prompt: 'Which products and services are you interested in?',
         required: true,
         options: [
             {
@@ -71,6 +119,18 @@ const survey = [
             {
                 tag: 'qrProductInterest_3',
                 prompt: 'Lead Capture'
+            },
+            {
+                tag: 'qrProductInterest_4',
+                prompt: 'Registration Data Management'
+            },
+            {
+                tag: 'qrProductInterest_5',
+                prompt: '2WAY Stick Building'
+            },
+            {
+                tag: 'qrProductInterest_6',
+                prompt: 'Other'
             }
         ]
     },
@@ -78,7 +138,7 @@ const survey = [
         type: 'TEXTAREA',
         tag: 'qrNotes',
         prompt: 'Notes',
-        required: true
+        required: false
     }
 ];
 
