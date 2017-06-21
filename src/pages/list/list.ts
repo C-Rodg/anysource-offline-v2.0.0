@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, ToastController } from 'ionic-angular';
+import * as moment from 'moment';
 
 import { StorageService } from '../../providers/storageService';
 import { CapturePage } from '../capture/capture';
@@ -29,7 +30,9 @@ export class ListPage {
   // Refresh leads 
   refreshLeads() {
     this.storageService.getAllRecords().then((leads) => {
-      this.leads = leads;
+      this.leads = leads.sort((leadA, leadB) => {
+        return moment(leadB.survey.qrEditDateTime).diff(moment(leadA.survey.qrEditDateTime));
+      });
       this.totalLeads = leads.length;
     }).catch((err) => {
       // Issue loading leads..

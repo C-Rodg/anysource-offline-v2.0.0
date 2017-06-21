@@ -34,7 +34,7 @@ export class CapturePage {
     const params = this.navParams.data;
     if (params && params.hasOwnProperty('survey')) {
       this.editFlag = true;
-      this.recordForm = this.formBuilder.group(this.createFilledForm(this.surveyObj, params))
+      this.recordForm = this.formBuilder.group(this.createFilledForm(this.surveyObj, params.survey))
     } else {
       this.editFlag = false;
       this.recordForm = this.formBuilder.group(this.createFreshForm(this.surveyObj));
@@ -48,6 +48,7 @@ export class CapturePage {
       formObj[question.tag] = this.determineValidation(question, {edit: true, val: form[question.tag] });
     })
     formObj['qrRegId'] = form.qrRegId;
+    formObj['qrCreateDateTime'] = form.qrCreateDateTime;
     return formObj;
   }
 
@@ -110,7 +111,45 @@ export class CapturePage {
 
   // Save Edits
   saveEdits() {
+    // Check if valid
+    const invalid = this.checkValidity(this.requiredFields, this.recordForm.value);
+    if (invalid) {
+      let toast = this.toastCtrl.create({
+        message: `${invalid} is a required field.`,
+        duration: 2500,
+        position: 'top',
+        cssClass: 'notify-error'
+      });
+      toast.present();
+      this.scrollToTop();
+      return false;
+    }
 
+    const thisForm = this.recordForm.value;
+    thisForm['qrDeviceId'] = this.settingsService.settings.deviceId;
+    thisForm['qrBoothRep'] = this.settingsService.settings.boothRep;
+    thisForm['qrBoothStation'] = this.settingsService.settings.boothStation;
+    thisForm['qrEditDateTime'] = moment().format();
+
+    // Create Person to save
+    const person = this.createPerson(thisForm);
+    this.storageService.savePerson(person).then((data) => {
+      let toast = this.toastCtrl.create({
+        message: `Edits saved successfully!`,
+        duration: 2500,
+        position: 'top'
+      });
+      toast.present();
+      this.navCtrl.pop();
+    }).catch(() => {
+      let toast = this.toastCtrl.create({
+        message: 'There was an issue saving this record...',
+        duration: 2500,
+        cssClass: 'notify-error',
+        position: 'top'
+      });
+      toast.present();
+    });
   }
 
   // Save new lead
@@ -138,7 +177,7 @@ export class CapturePage {
     thisForm['qrCreateDateTime'] = moment().format();
     thisForm['qrEditDateTime'] = moment().format();
 
-    console.log(thisForm);
+    // Create 'Person' to save
     const person = this.createPerson(thisForm);
     this.storageService.savePerson(person).then((data) => {
       let toast = this.toastCtrl.create({
