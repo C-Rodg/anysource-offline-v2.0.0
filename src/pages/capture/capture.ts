@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import { Content, NavController, ToastController, NavParams } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
@@ -28,7 +28,8 @@ export class CapturePage {
     private storageService: StorageService,
     private toastCtrl: ToastController,
     private formBuilder: FormBuilder,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private zone: NgZone
   ) {
     this.surveyObj = survey;
     const params = this.navParams.data;
@@ -180,14 +181,20 @@ export class CapturePage {
     // Create 'Person' to save
     const person = this.createPerson(thisForm);
     this.storageService.savePerson(person).then((data) => {
+      this.scrollToTop();
       let toast = this.toastCtrl.create({
         message: `New record saved!`,
         duration: 2500,
         position: 'top'
       });
-      this.recordForm = this.formBuilder.group(this.createFreshForm(this.surveyObj));
-      toast.present();      
-      this.scrollToTop();   
+      toast.present();            
+
+      setTimeout(function() {
+        this.zone.run(() => {
+          this.navCtrl.setRoot(CapturePage);
+          //this.recordForm = this.formBuilder.group(this.createFreshForm(this.surveyObj));
+        });
+      }.bind(this), 300);                    
     }).catch((err) => {
       let toast = this.toastCtrl.create({
         message: 'There was an issue saving this record..',
@@ -230,5 +237,9 @@ export class CapturePage {
   // DOM Helper - go to top of page
   scrollToTop() {
     this.contentPage.scrollToTop();
+  }
+
+  log() {
+    console.log(this.recordForm.value);
   }
 }

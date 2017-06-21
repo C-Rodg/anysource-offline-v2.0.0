@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 
 import { SettingsService } from '../../providers/settingsService';
 import { StorageService } from '../../providers/storageService';
+import { UploadService } from '../../providers/uploadService';
 
 @Component({
   selector: 'page-settings',
@@ -16,7 +17,8 @@ export class SettingsPage {
   constructor(
     public navCtrl: NavController,
     private settingsService: SettingsService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private uploadService: UploadService
   ) {
 
   }
@@ -41,7 +43,7 @@ export class SettingsPage {
 
   // Attempt to upload scans
   forceUpload() {
-    
+    this.uploadService.uploadPending();
   }
 
 }
