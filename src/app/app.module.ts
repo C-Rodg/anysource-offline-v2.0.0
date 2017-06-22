@@ -30,7 +30,7 @@ import { UploadService } from '../providers/uploadService';
   imports: [
     BrowserModule,
     HttpModule,
-    JsonpModule,
+    JsonpModule,      
     IonicModule.forRoot(MyApp, {
       mode: 'md',
       tabsHideOnSubPages: true
@@ -47,7 +47,7 @@ import { UploadService } from '../providers/uploadService';
   providers: [
     StorageService,
     SettingsService,
-    UploadService,
+    UploadService,    
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

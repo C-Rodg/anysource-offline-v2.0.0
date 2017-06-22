@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Jsonp } from '@angular/http';
+import { Http, Jsonp, JsonpModule} from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
@@ -10,16 +10,18 @@ import { survey } from '../config/survey';
 @Injectable()
 export class UploadService {
     
-    private url: string = "https://anysource.validar.com/WebServices/V2/Core/JSONSubmitResult.aspx?_JO=JSONP_CALLBACK";
+    //private url: string = "https://anysource.validar.com/WebServices/V2/Core/JSONSubmitResult.aspx?_JO=JSONP_CALLBACK";  // CALLSBACK ANGULAR OBJECT
+    private url: string = "https://anysource.validar.com/WebServices/V2/Core/JSONSubmitResult.aspx?_JO=validarCallback";
 
     constructor(
         private http: Http,
         private jsonp: Jsonp,
         private storageService: StorageService,
-        private settingsService: SettingsService
+        private settingsService: SettingsService,
     ) {
-
-    }
+        
+        (<any>window).validarCallback.__submitComplete = this.handleResponse.bind(this);
+    }    
 
     // Upload Pending Records
     public uploadPending() {
@@ -43,6 +45,7 @@ export class UploadService {
                 console.log(urlList);
 
                 const requests = urlList.map((reg) => {
+                    //return this.makeRequest(reg.link);
                     return this.makeRequest(reg.link);
                 });
                 return Promise.all(requests);
@@ -51,9 +54,31 @@ export class UploadService {
                 resolve('COMPLETE!');
             });
 
-            // then.. close loading?, show alert?
-
          });
+    }
+
+    public uploadRecords(records) {
+        let urlArray = [];
+        records.forEach((registrant) => {
+            urlArray.push({
+                link: this.convertPersonToUrl(registrant.survey),
+                id: registrant.survey.qrRegId
+            });        
+        });
+        console.log(urlArray);
+        
+    }
+
+    private startUrlLoop(urlList) {
+        return new Promise((resolve, reject) => {
+            
+        })
+    }
+
+    // Handle Validar Response
+    private handleResponse(success, msg) {
+        console.log(success, msg);
+        console.log(this.url);
     }
 
     // Convert survey form to POST Url
@@ -98,10 +123,9 @@ export class UploadService {
     // Make request
     private makeRequest(url) {
         console.log('making request..');
-        return this.jsonp.request(url).map(res => {
-            res.json();
-            console.log(res);
-            return res;
-        }).toPromise();
-    }
+        return this.jsonp.request(url).map(res => res.json()).toPromise().catch((err) => {
+            console.log(err);
+            console.log("Each Request will hit this...");
+        });
+    }  
 }
