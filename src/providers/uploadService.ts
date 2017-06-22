@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Jsonp } from '@angular/http';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 import { StorageService } from './storageService';
 import { SettingsService } from './settingsService';
@@ -12,7 +14,7 @@ export class UploadService {
 
     constructor(
         private http: Http,
-        //private jsonp: Jsonp,
+        private jsonp: Jsonp,
         private storageService: StorageService,
         private settingsService: SettingsService
     ) {
@@ -21,24 +23,37 @@ export class UploadService {
 
     // Upload Pending Records
     public uploadPending() {
-        let urlArray = [];
-        this.storageService.getPendingRecords().then((data) => {
-            
-            // Get URLs
-            data.forEach((registrant) => {
-                urlArray.push({
-                    link: this.convertPersonToUrl(registrant.survey),
-                    id: registrant.survey.qrRegId
-                });
-            });
-            return urlArray;
-        }).then((urlList) => {
-            
-            // Start Uploading
-            console.log(urlList);
-        });
+        return new Promise((resolve, reject) => {
 
-        // then.. close loading?, show alert?
+            let urlArray = [];
+            this.storageService.getPendingRecords().then((data) => {
+                
+                // Get URLs
+                data.forEach((registrant) => {
+                    urlArray.push({
+                        link: this.convertPersonToUrl(registrant.survey),
+                        id: registrant.survey.qrRegId
+                    });
+                });
+                return urlArray;
+            }).then((urlList) => {
+                
+                // Start Uploading
+                console.log("starting upload");
+                console.log(urlList);
+
+                const requests = urlList.map((reg) => {
+                    return this.makeRequest(reg.link);
+                });
+                return Promise.all(requests);
+            }).then((data) => {
+                console.log('in last step.. resolving.."');
+                resolve('COMPLETE!');
+            });
+
+            // then.. close loading?, show alert?
+
+         });
     }
 
     // Convert survey form to POST Url
@@ -78,5 +93,15 @@ export class UploadService {
         fullUrl += (this.settingsService.settings.overwriteRecords) ? '&_AA=0' : '&_AA=1';
         fullUrl += `${surveyQuestions}&_C=1`;
         return fullUrl;
+    }
+
+    // Make request
+    private makeRequest(url) {
+        console.log('making request..');
+        return this.jsonp.request(url).map(res => {
+            res.json();
+            console.log(res);
+            return res;
+        }).toPromise();
     }
 }

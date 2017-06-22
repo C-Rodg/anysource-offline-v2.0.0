@@ -43,7 +43,12 @@ export class SettingsPage {
 
   // Attempt to upload scans
   forceUpload() {
-    this.uploadService.uploadPending();
+    this.uploadService.uploadPending().then((d) => {
+      console.log("BACK IN SETTINGS");
+    }).catch((err) => {
+      console.log("BACK IN SETTINGS - BUT FAILED : (");
+      console.log(err);
+    });
   }
 
 }

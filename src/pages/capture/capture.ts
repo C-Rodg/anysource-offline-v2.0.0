@@ -239,7 +239,4 @@ export class CapturePage {
     this.contentPage.scrollToTop();
   }
 
-  log() {
-    console.log(this.recordForm.value);
-  }
 }
