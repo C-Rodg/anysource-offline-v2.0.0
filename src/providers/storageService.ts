@@ -24,6 +24,12 @@ export class StorageService {
         return localforage.removeItem(regId);
     }
 
+    // Mark as Uploaded
+    markUploaded(person: any): Promise<any> {
+        person.uploaded = true;
+        return this.savePerson(person);
+    }
+
     // Get All Records
     getAllRecords(): Promise<any> {
         let people = [];

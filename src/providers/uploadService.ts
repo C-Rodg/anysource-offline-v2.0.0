@@ -12,6 +12,8 @@ export class UploadService {
     
     //private url: string = "https://anysource.validar.com/WebServices/V2/Core/JSONSubmitResult.aspx?_JO=JSONP_CALLBACK";  // CALLSBACK ANGULAR OBJECT
     private url: string = "https://anysource.validar.com/WebServices/V2/Core/JSONSubmitResult.aspx?_JO=validarCallback";
+    private urlArray = [];
+    private errorArray = [];
 
     constructor(
         private http: Http,
@@ -23,62 +25,67 @@ export class UploadService {
         (<any>window).validarCallback.__submitComplete = this.handleResponse.bind(this);
     }    
 
-    // Upload Pending Records
-    public uploadPending() {
-        return new Promise((resolve, reject) => {
-
-            let urlArray = [];
-            this.storageService.getPendingRecords().then((data) => {
-                
-                // Get URLs
-                data.forEach((registrant) => {
-                    urlArray.push({
-                        link: this.convertPersonToUrl(registrant.survey),
-                        id: registrant.survey.qrRegId
-                    });
-                });
-                return urlArray;
-            }).then((urlList) => {
-                
-                // Start Uploading
-                console.log("starting upload");
-                console.log(urlList);
-
-                const requests = urlList.map((reg) => {
-                    //return this.makeRequest(reg.link);
-                    return this.makeRequest(reg.link);
-                });
-                return Promise.all(requests);
-            }).then((data) => {
-                console.log('in last step.. resolving.."');
-                resolve('COMPLETE!');
-            });
-
-         });
-    }
-
+    // Create URL arrays, send first request
     public uploadRecords(records) {
-        let urlArray = [];
+        this.urlArray = [];
+        this.errorArray = [];
         records.forEach((registrant) => {
-            urlArray.push({
+            this.urlArray.push({
                 link: this.convertPersonToUrl(registrant.survey),
-                id: registrant.survey.qrRegId
+                id: registrant.survey.qrRegId,
+                person: registrant
             });        
         });
-        console.log(urlArray);
-        
+
+        this.sendRequest(this.urlArray[0]);        
     }
 
-    private startUrlLoop(urlList) {
-        return new Promise((resolve, reject) => {
-            
+    // Send request, eat errors..
+    private sendRequest(url) {
+        this.makeRequest(url.link).then((data) => {
+            console.log("MADE A REQUEST");
+            console.log(data);
         })
+        .catch((err) => {
+            console.log("Made a Request??-error");
+            console.log(err);
+        });
     }
 
     // Handle Validar Response
     private handleResponse(success, msg) {
-        console.log(success, msg);
-        console.log(this.url);
+        console.log("VALIDAR CALLBACK");
+        
+        // Mark as uploaded
+        if (success) {
+            this.storageService.markUploaded(this.urlArray[0].person)
+            .then(() => {
+                this.urlArray.shift();
+                if (this.urlArray.length > 0) {
+                    this.sendRequest(this.urlArray[0].link);
+                } else {
+                    // ALL DONE!.. alert done + any errors?
+                }
+            })
+            .catch((err) => {
+                this.errorArray.push(err);
+                this.urlArray.shift();
+                if (this.urlArray.length > 0) {
+                    this.sendRequest(this.urlArray[0].link);
+                } else {
+                    // ALL DONE!.. alert done + errors?
+                }
+            });
+        } else {
+            // make a note about an error and continue
+            this.errorArray.push(msg);
+            this.urlArray.shift();
+            if (this.urlArray.length > 0) {
+                this.sendRequest(this.urlArray[0].link);
+            } else {
+                // ALL DONE!.. alert done + errors
+            }
+        }        
     }
 
     // Convert survey form to POST Url
