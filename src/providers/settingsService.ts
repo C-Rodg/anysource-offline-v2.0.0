@@ -23,7 +23,8 @@ export class SettingsService {
         deviceId: "",
         boothRep: "",
         boothStation: "",
-        overwriteRecords: true        
+        overwriteRecords: true,
+        backgroundUploadWait: 8        
     }
 
     constructor(
@@ -53,11 +54,17 @@ export class SettingsService {
     loadSettings() {
         const settings = window.localStorage.getItem('validar_settings');
         if (settings) {
-            const settingsObj = JSON.parse(settings);
-            this.settings = settingsObj;
-            if (!this.settings.deviceId) {
-                this.settings.deviceId = UUID.UUID();
+            const settingsObj = JSON.parse(settings);        
+            if (!settingsObj.deviceId) {
+                settingsObj.deviceId = UUID.UUID();
             }
+            if (!settingsObj.hasOwnProperty('overwriteRecords')) {
+                settingsObj.overwriteRecords = true;
+            }
+            if (!settingsObj.hasOwnProperty('backgroundUploadWait')) {
+                settingsObj.backgroundUploadWait = 8;
+            }
+            this.settings = settingsObj;            
             this.saveSettingsToLocal();
         } else {
             if (!this.settings.deviceId) {

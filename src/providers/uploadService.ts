@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Jsonp, JsonpModule} from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import { ToastController, Events } from 'ionic-angular';
 
 import { StorageService } from './storageService';
 import { SettingsService } from './settingsService';
@@ -14,19 +15,23 @@ export class UploadService {
     private url: string = "https://anysource.validar.com/WebServices/V2/Core/JSONSubmitResult.aspx?_JO=validarCallback";
     private urlArray = [];
     private errorArray = [];
+    private showUploadToast: boolean = false;
+    private backgroundInterval: any;
 
     constructor(
         private http: Http,
         private jsonp: Jsonp,
         private storageService: StorageService,
         private settingsService: SettingsService,
-    ) {
-        
+        private toastCtrl: ToastController,
+        private ev: Events
+    ) {        
         (<any>window).validarCallback.__submitComplete = this.handleResponse.bind(this);
     }    
 
     // Create URL arrays, send first request
     public uploadRecords(records) {
+        this.showUploadToast = true;
         this.urlArray = [];
         this.errorArray = [];
         records.forEach((registrant) => {
@@ -42,38 +47,43 @@ export class UploadService {
 
     // Send request, eat errors..
     private sendRequest(url) {
-        this.makeRequest(url.link).then((data) => {
-            console.log("MADE A REQUEST");
-            console.log(data);
-        })
-        .catch((err) => {
-            console.log("Made a Request??-error");
-            console.log(err);
-        });
+        this.makeRequest(url.link).then((data) => {}).catch((err) => {});
+    }
+
+    private handleToast(errs) {
+        if (this.showUploadToast) {
+            const msg = (errs.length > 0) ? `Finished uploading with ${errs.length} errors` : `Finished uploading records!`;
+            let toast = this.toastCtrl.create({
+                message: msg,
+                duration: 3000,
+                position: 'top'
+            });
+            toast.present();
+            this.showUploadToast = false;            
+        }
+        this.ev.publish('update:pending');
     }
 
     // Handle Validar Response
-    private handleResponse(success, msg) {
-        console.log("VALIDAR CALLBACK");
-        
+    handleResponse(success, msg) {
         // Mark as uploaded
         if (success) {
             this.storageService.markUploaded(this.urlArray[0].person)
             .then(() => {
                 this.urlArray.shift();
                 if (this.urlArray.length > 0) {
-                    this.sendRequest(this.urlArray[0].link);
+                    this.sendRequest(this.urlArray[0]);
                 } else {
-                    // ALL DONE!.. alert done + any errors?
+                    this.handleToast(this.errorArray);
                 }
             })
             .catch((err) => {
                 this.errorArray.push(err);
                 this.urlArray.shift();
                 if (this.urlArray.length > 0) {
-                    this.sendRequest(this.urlArray[0].link);
+                    this.sendRequest(this.urlArray[0]);
                 } else {
-                    // ALL DONE!.. alert done + errors?
+                    this.handleToast(this.errorArray);
                 }
             });
         } else {
@@ -81,9 +91,9 @@ export class UploadService {
             this.errorArray.push(msg);
             this.urlArray.shift();
             if (this.urlArray.length > 0) {
-                this.sendRequest(this.urlArray[0].link);
+                this.sendRequest(this.urlArray[0]);
             } else {
-                // ALL DONE!.. alert done + errors
+                this.handleToast(this.errorArray);
             }
         }        
     }
@@ -127,12 +137,46 @@ export class UploadService {
         return fullUrl;
     }
 
-    // Make request
+    // Make request and eat the error
     private makeRequest(url) {
-        console.log('making request..');
-        return this.jsonp.request(url).map(res => res.json()).toPromise().catch((err) => {
-            console.log(err);
-            console.log("Each Request will hit this...");
-        });
+        return this.jsonp.request(url).map(res => res.json()).toPromise().catch((err) => {});
     }  
+
+    // Start new background upload time
+    initializeBackgroundUpload(mins) {
+        clearInterval(this.backgroundInterval);
+        if (mins === 0) {
+            return false;
+        }
+        const time = mins * 60 * 1000;
+        this.backgroundInterval = setInterval(() => {
+            this.backgroundUpload();
+        }, time);
+    }
+
+    // Upload in the background
+    private backgroundUpload() {
+        if (!window.navigator.onLine) {
+            return false;
+        }
+        this.storageService.getPendingRecords().then((data) => {
+            if (data && data.length > 0) {
+                this.startBackgroundUpload(data);
+            }
+        });
+    }
+
+    private startBackgroundUpload(records) {        
+        this.urlArray = [];
+        this.errorArray = [];
+        records.forEach((registrant) => {
+            this.urlArray.push({
+                link: this.convertPersonToUrl(registrant.survey),
+                id: registrant.survey.qrRegId,
+                person: registrant
+            });        
+        });
+
+        this.sendRequest(this.urlArray[0]); 
+    }
 }
