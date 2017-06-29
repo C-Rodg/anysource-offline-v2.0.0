@@ -21,7 +21,7 @@
 
 <ion-footer>
   <ion-toolbar>
-    <button *ngIf="!editFlag" color="p-primary" ion-button block large (tap)="saveNewRecord()">Save New Record</button>
-    <button *ngIf="editFlag" color="p-primary" ion-button block large (tap)="saveEdits()">Save Edits</button>
+    <button *ngIf="!editFlag" color="p-primary" class="save-btn" ion-button block large (tap)="saveNewRecord()">Save New Record</button>
+    <button *ngIf="editFlag" color="p-primary" class="save-btn" ion-button block large (tap)="saveEdits()">Save Edits</button>
   </ion-toolbar>
 </ion-footer>
