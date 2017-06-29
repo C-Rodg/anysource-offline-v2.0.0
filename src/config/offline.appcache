@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2017-06-29:11:v6
+# 2017-06-29:12:v1
 
 # Explicit cached entries
 
@@ -42,9 +42,9 @@ assets/icon/ms-icon-310x310.png
 assets/fonts/ionicons.eot
 assets/fonts/ionicons.scss
 assets/fonts/ionicons.svg
-assets/fonts/ionicons.ttf
-assets/fonts/ionicons.woff
-assets/fonts/ionicons.woff2
+assets/fonts/ionicons.ttf?v=3.0.0-alpha.3
+assets/fonts/ionicons.woff?v=3.0.0-alpha.3
+assets/fonts/ionicons.woff2?v=3.0.0-alpha.3
 assets/fonts/noto-sans.scss
 assets/fonts/noto-sans-bold.ttf
 assets/fonts/noto-sans-bold.woff
@@ -67,3 +67,8 @@ assets/fonts/roboto-regular.woff2
 # White-list network files
 NETWORK:
 *
+
+FALLBACK:
+assets/fonts/ionicons.ttf?v=3.0.0-alpha.3 assets/fonts/ionicons.ttf assets/fonts/ionicons.ttf
+assets/fonts/ionicons.woff?v=3.0.0-alpha.3 assets/fonts/ionicons.woff?v=3.0.0-alpha.3
+assets/fonts/ionicons.woff2?v=3.0.0-alpha.3 assets/fonts/ionicons.woff2?v=3.0.0-alpha.3

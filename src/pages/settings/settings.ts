@@ -50,6 +50,15 @@ export class SettingsPage {
 
   // Attempt to upload scans
   forceUpload() {
+    if (!window.navigator.onLine) {
+      let toast = this.toastCtrl.create({
+        message: 'Please check your internet connection..',
+        duration: 2500,
+        position: 'top'
+      });
+      toast.present();
+      return false;
+    }
     this.storageService.getPendingRecords().then((data) => {
       if (data && data.length > 0) {
         this.uploadService.uploadRecords(data);
