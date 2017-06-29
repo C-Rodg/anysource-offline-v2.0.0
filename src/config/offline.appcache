@@ -1,0 +1,69 @@
+CACHE MANIFEST
+# 2017-06-29:11:v5
+
+# Explicit cached entries
+
+# CORE CONTENT
+index.html
+build/main.css
+build/main.js
+build/polyfills.js
+
+# IMAGES
+assets/logo.png
+assets/icon/android-icon-36x36.png
+assets/icon/android-icon-48x48.png
+assets/icon/android-icon-72x72.png
+assets/icon/android-icon-96x96.png
+assets/icon/android-icon-144x144.png
+assets/icon/android-icon-192x192.png
+assets/icon/apple-icon.png
+assets/icon/apple-icon-57x57.png
+assets/icon/apple-icon-60x60.png
+assets/icon/apple-icon-72x72.png
+assets/icon/apple-icon-76x76.png
+assets/icon/apple-icon-114x114.png
+assets/icon/apple-icon-120x120.png
+assets/icon/apple-icon-144x144.png
+assets/icon/apple-icon-152x152.png
+assets/icon/apple-icon-167x167.png
+assets/icon/apple-icon-180x180.png
+assets/icon/apple-icon-precomposed.png
+assets/icon/favicon.ico
+assets/icon/favicon-16x16.png
+assets/icon/favicon-32x32.png
+assets/icon/favicon-96x96.png
+assets/icon/ms-icon-70x70.png
+assets/icon/ms-icon-144x144.png
+assets/icon/ms-icon-150x150.png
+assets/icon/ms-icon-310x310.png
+
+# FONTS
+assets/fonts/ionicons.eot
+assets/fonts/ionicons.scss
+assets/fonts/ionicons.svg
+assets/fonts/ionicons.ttf
+assets/fonts/ionicons.woff
+assets/fonts/ionicons.woff2
+assets/fonts/noto-sans.scss
+assets/fonts/noto-sans-bold.ttf
+assets/fonts/noto-sans-bold.woff
+assets/fonts/noto-sans-regular.ttf
+assets/fonts/noto-sans-regular.woff
+assets/fonts/roboto.scss
+assets/fonts/roboto-bold.ttf
+assets/fonts/roboto-bold.woff
+assets/fonts/roboto-bold.woff2
+assets/fonts/roboto-light.ttf
+assets/fonts/roboto-light.woff
+assets/fonts/roboto-light.woff2
+assets/fonts/roboto-medium.ttf
+assets/fonts/roboto-medium.woff
+assets/fonts/roboto-medium.woff2
+assets/fonts/roboto-regular.ttf
+assets/fonts/roboto-regular.woff
+assets/fonts/roboto-regular.woff2
+
+# White-list network files
+NETWORK:
+*
